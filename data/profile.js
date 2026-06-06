@@ -9,7 +9,7 @@ export const profile = {
   location: "Pune, Maharashtra, IN",
   avatar: "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=srinidhi&backgroundColor=0f0f0f",
   stats: [
-    { label: "Projects", value: "4+" },
+    
     { label: "Experience", value: "6 mo" },
     { label: "Location", value: "Pune, IN" },
   ],
