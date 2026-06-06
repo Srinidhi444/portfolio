@@ -260,3 +260,49 @@
 }
 @keyframes blinkCaret { 50% { opacity: 0; } }
 
+@media (max-width: 768px) {
+  #taskbar {
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    transform: none;
+    width: auto;
+    max-width: none;
+    padding: 10px 12px;
+    gap: 8px;
+    border-radius: 22px;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overflow-y: visible;
+    scrollbar-width: none;
+    box-sizing: border-box;
+  }
+
+  #taskbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .taskbar-btn {
+    min-width: 46px;
+    min-height: 46px;
+    flex: 0 0 auto;
+    font-size: 18px;
+  }
+
+  .taskbar-sep {
+    display: none;
+  }
+
+  #theme-toggle,
+  #taskbar-clock {
+    flex: 0 0 auto;
+  }
+
+  .taskbar-btn .tooltip {
+    display: none;
+  }
+
+  .taskbar-btn.is-open::after {
+    bottom: -4px;
+  }
+}

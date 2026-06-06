@@ -268,3 +268,108 @@
   }
   .about-content { grid-template-columns: 1fr; }
 }
+/* ============================================================
+   MOBILE RESPONSIVE WINDOWS
+   ============================================================ */
+@media (max-width: 768px) {
+  .window {
+    left: 8px !important;
+    top: 8px !important;
+    width: calc(100vw - 16px) !important;
+    height: calc(100vh - 96px) !important;
+    min-width: 0;
+    min-height: 0;
+    border-radius: 18px;
+  }
+
+  .window-titlebar {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .window-title {
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .window-controls {
+    gap: 5px;
+  }
+
+  .wc-btn {
+    width: 12px;
+    height: 12px;
+  }
+
+  .window-actions {
+    gap: 4px;
+  }
+
+  .wa-btn {
+    min-width: 24px;
+    height: 22px;
+    padding: 0 7px;
+    font-size: 11px;
+  }
+
+  .window-body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .about-content {
+    grid-template-columns: 1fr;
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .about-avatar {
+    width: 72px;
+    height: 72px;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .exp-list,
+  .blog-list,
+  .contact-content {
+    padding: 16px;
+  }
+
+  .exp-header {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .blog-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .blog-card-left p {
+    max-width: none;
+  }
+
+  .contact-row {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .contact-icon {
+    width: 36px;
+    font-size: 20px;
+  }
+
+  .contact-info a {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .window-resize {
+    display: none;
+  }
+}

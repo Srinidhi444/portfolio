@@ -79,7 +79,7 @@ export const projects = [
     tags: ["Streamlit", "Python", "RAG"],
     desc: "An AI-powered oceanographic analysis platform that combines RAG-based querying with interactive visualizations for exploring ARGO float datasets.",
     github: "https://github.com/Srinidhi444/FloatChat-AI",
-    demo: { enabled: true, url: "https://floatchat.example.com" },
+    demo: { enabled: false, url: "https://floatchat.example.com" },
     image: "assets/image.png",
     accent: "#ffffff"
   }
