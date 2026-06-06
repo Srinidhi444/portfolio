@@ -1,5 +1,5 @@
 // ============================================================
-//  3D CURVED PROJECT CAROUSEL — responsive mobile version
+//  3D CURVED PROJECT CAROUSEL — wheel + swipe + mobile arrows
 // ============================================================
 export async function initCarousel(canvasId, projects) {
   const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js');
@@ -14,6 +14,7 @@ export async function initCarousel(canvasId, projects) {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(48, container.clientWidth / container.clientHeight, 0.1, 100);
+  camera.position.set(0, 0.35, 8.8);
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.65));
   const dl = new THREE.DirectionalLight(0xffffff, 1.1);
@@ -58,45 +59,26 @@ export async function initCarousel(canvasId, projects) {
   let currentIdx = 0;
   let targetOffset = 0;
   let currentOffset = 0;
+  const R = 6.9;
+  const spacing = 0.86;
 
   function isMobile() {
     return window.innerWidth <= 768;
   }
 
-  function getConfig() {
-    if (isMobile()) {
-      return {
-        cameraZ: 8.2,
-        cameraY: 0.2,
-        radius: 5.6,
-        spacing: 0.72,
-        geoW: 6.8,
-        geoH: 4.2,
-        curveDiv: 3.4,
-        zOffset: 2.4,
-        activeScale: 1.08,
-        inactiveScale: 0.46,
-        lookAtY: 0.15
-      };
-    }
-
-    return {
-      cameraZ: 8.8,
-      cameraY: 0.35,
-      radius: 6.9,
-      spacing: 0.86,
-      geoW: 7.8,
-      geoH: 4.8,
-      curveDiv: 3.9,
-      zOffset: 3.0,
-      activeScale: 1.18,
-      inactiveScale: 0.68,
-      lookAtY: 0.2
-    };
+  function goTo(index) {
+    currentIdx = (index + projects.length) % projects.length;
+    targetOffset = currentIdx;
+    updateHUD(currentIdx);
   }
 
-  const cfg = getConfig();
-  camera.position.set(0, cfg.cameraY, cfg.cameraZ);
+  function nextProject() {
+    goTo(currentIdx + 1);
+  }
+
+  function prevProject() {
+    goTo(currentIdx - 1);
+  }
 
   function createRoundedTexture(tex) {
     if (!tex || !tex.image) return tex;
@@ -126,13 +108,12 @@ export async function initCarousel(canvasId, projects) {
   }
 
   projects.forEach((proj, i) => {
-    const cfg = getConfig();
-    const geo = new THREE.PlaneGeometry(cfg.geoW, cfg.geoH, 64, 22);
+    const geo = new THREE.PlaneGeometry(7.8, 4.8, 64, 22);
     const pos = geo.attributes.position;
 
     for (let v = 0; v < pos.count; v++) {
       const x = pos.getX(v);
-      const nx = x / cfg.curveDiv;
+      const nx = x / 3.9;
       const z = Math.abs(nx) * 0.82 - 0.30;
       pos.setZ(v, z);
     }
@@ -188,76 +169,112 @@ export async function initCarousel(canvasId, projects) {
   projects.forEach((_, i) => {
     const d = document.createElement('div');
     d.className = 'cdot' + (i === 0 ? ' active' : '');
-    d.addEventListener('click', () => {
-      currentIdx = i;
-      targetOffset = i;
-      updateHUD(i);
-    });
+    d.addEventListener('click', () => goTo(i));
     dotsEl.appendChild(d);
   });
+
+  const navEl = document.getElementById('carousel-nav');
+  if (navEl) {
+    navEl.innerHTML = `
+      <button class="carousel-arrow carousel-arrow-left" type="button" aria-label="Previous project">‹</button>
+      <button class="carousel-arrow carousel-arrow-right" type="button" aria-label="Next project">›</button>
+    `;
+
+    const prevBtn = navEl.querySelector('.carousel-arrow-left');
+    const nextBtn = navEl.querySelector('.carousel-arrow-right');
+
+    prevBtn?.addEventListener('click', prevProject);
+    nextBtn?.addEventListener('click', nextProject);
+
+    const updateNavVisibility = () => {
+      navEl.style.display = isMobile() ? 'flex' : 'none';
+    };
+
+    updateNavVisibility();
+    window.addEventListener('resize', updateNavVisibility);
+  }
 
   let wheelCooldown = false;
   canvas.addEventListener('wheel', e => {
     e.preventDefault();
-    if (wheelCooldown) return;
+    if (wheelCooldown || isMobile()) return;
+
     wheelCooldown = true;
-    setTimeout(() => (wheelCooldown = false), isMobile() ? 950 : 850);
+    setTimeout(() => {
+      wheelCooldown = false;
+    }, 850);
 
-    if (e.deltaY > 0) currentIdx = (currentIdx + 1) % projects.length;
-    else currentIdx = (currentIdx - 1 + projects.length) % projects.length;
-
-    targetOffset = currentIdx;
-    updateHUD(currentIdx);
+    if (e.deltaY > 0) nextProject();
+    else prevProject();
   }, { passive: false });
 
-  let mx = 0, my = 0;
+  let mx = 0;
+  let my = 0;
   canvas.addEventListener('mousemove', e => {
     const r = canvas.getBoundingClientRect();
     mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
     my = ((e.clientY - r.top) / r.height - 0.5) * 2;
   });
 
+  let touchStartX = 0;
+  let touchDeltaX = 0;
+
+  canvas.addEventListener('touchstart', e => {
+    if (!isMobile()) return;
+    touchStartX = e.touches[0].clientX;
+    touchDeltaX = 0;
+  }, { passive: true });
+
+  canvas.addEventListener('touchmove', e => {
+    if (!isMobile()) return;
+    touchDeltaX = e.touches[0].clientX - touchStartX;
+  }, { passive: true });
+
+  canvas.addEventListener('touchend', () => {
+    if (!isMobile()) return;
+
+    if (touchDeltaX <= -40) nextProject();
+    else if (touchDeltaX >= 40) prevProject();
+
+    touchDeltaX = 0;
+  });
+
   function animate() {
     requestAnimationFrame(animate);
 
-    const cfg = getConfig();
     currentOffset += (targetOffset - currentOffset) * 0.014;
 
-    const targetX = isMobile() ? mx * 0.12 : mx * 0.35;
-    const targetY = isMobile()
-      ? (-my * 0.08 + cfg.cameraY)
-      : (-my * 0.18 + 0.42);
+    const targetCamX = isMobile() ? 0 : mx * 0.35;
+    const targetCamY = isMobile() ? 0.34 : (-my * 0.18 + 0.42);
 
-    camera.position.x += (targetX - camera.position.x) * 0.035;
-    camera.position.y += (targetY - camera.position.y) * 0.04;
-    camera.position.z += (cfg.cameraZ - camera.position.z) * 0.05;
-    camera.lookAt(0, cfg.lookAtY, -6.9);
-
+    camera.position.x += (targetCamX - camera.position.x) * 0.035;
+    camera.position.y += (targetCamY - camera.position.y) * 0.04;
+    camera.lookAt(0, 0.2, -6.9);
     room.rotation.y += isMobile() ? 0.00035 : 0.0007;
 
     cards.forEach((card, i) => {
       const rel = i - currentOffset;
-      const a = rel * cfg.spacing;
+      const a = rel * (isMobile() ? 0.72 : spacing);
+      const radius = isMobile() ? 5.9 : R;
 
-      card.position.x = Math.sin(a) * cfg.radius;
-      card.position.z = Math.cos(a) * cfg.radius - (cfg.radius + cfg.zOffset);
-      card.position.y = Math.sin(performance.now() * 0.001 + i * 0.65) * 0.04 + (isMobile() ? 0.05 : 0.15);
+      card.position.x = Math.sin(a) * radius;
+      card.position.z = Math.cos(a) * radius - (radius + (isMobile() ? 1.8 : 3.0));
+      card.position.y = Math.sin(performance.now() * 0.001 + i * 0.65) * 0.04 + (isMobile() ? 0.12 : 0.15);
       card.rotation.y = -a * 0.98;
 
       const active = Math.abs(i - currentIdx) < 0.001;
-      const targetScale = active ? cfg.activeScale : cfg.inactiveScale;
+      const targetScale = active ? (isMobile() ? 1.14 : 1.18) : (isMobile() ? 0.52 : 0.68);
+
       card.scale.lerp(new THREE.Vector3(targetScale, targetScale, 1), 0.06);
-      card.material.opacity += ((active ? 1 : (isMobile() ? 0.16 : 0.24)) - card.material.opacity) * 0.08;
+      card.material.opacity += ((active ? 1 : (isMobile() ? 0.18 : 0.24)) - card.material.opacity) * 0.08;
     });
 
     renderer.render(scene, camera);
   }
 
   const ro = new ResizeObserver(() => {
-    const cfg = getConfig();
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
-    camera.position.z = cfg.cameraZ;
     renderer.setSize(container.clientWidth, container.clientHeight);
   });
 
