@@ -45,7 +45,7 @@ export const projects = [
     id: 1,
     title: "Exchange Engine",
     subtitle: "Real-Time Crypto Exchange",
-    date: "2025-11",
+  
     tags: ["Node.js", "WebSockets", "Redis", "PostgreSQL"],
     desc: "A full-stack exchange project with live order books, real-time trade streams, matching flow design, and scalable service architecture for trading data and execution.",
     github: "https://github.com/Srinidhi444/Exchange",
@@ -57,7 +57,7 @@ export const projects = [
     id: 2,
     title: "Fundraiser",
     subtitle: "Crowdfunding Platform",
-    date: "2025-08",
+
     tags: ["React.js", "Node.js", "MongoDB", "Cloudinary"],
     desc: "A full-stack crowdfunding platform featuring fundraiser creation, secure authentication, donation tracking, user dashboards, and organiser engagement tools.",
     github: "https://github.com/Srinidhi444/Fundraiser",
@@ -69,7 +69,7 @@ export const projects = [
     id: 3,
     title: "GradeX",
     subtitle: "Blockchain Evaluation Platform",
-    date: "2025-10",
+
     tags: ["Next.js", "MongoDB", "Solidity", "MCP"],
     desc: "A blockchain-based evaluation platform designed for transparent academic workflows, secure result handling, and verifiable grading-related records.",
     github: "https://github.com/Srinidhi444/BlockChain-Based-Evaluation-Platform",
@@ -81,7 +81,7 @@ export const projects = [
     id: 4,
     title: "FloatChat AI",
     subtitle: "ARGO Float Explorer",
-    date: "2025-06",
+
     tags: ["Streamlit", "Python", "RAG"],
     desc: "An AI-powered oceanographic analysis platform that combines RAG-based querying with interactive visualisations for exploring ARGO float datasets.",
     github: "https://github.com/Srinidhi444/ARGO-Float-chatbot",
