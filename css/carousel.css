@@ -1,0 +1,167 @@
+/* ============================================================
+   PROJECTS CAROUSEL WINDOW  — 3D curved card viewer
+   ============================================================ */
+
+#projects-window .window-body {
+  background: #020202;
+  overflow: hidden;
+}
+
+#carousel-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+#carousel-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Carousel HUD overlay ---------- */
+#carousel-hud {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: var(--space-5) var(--space-8);
+  background: linear-gradient(to top, rgba(5,5,16,0.95) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+#carousel-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+#carousel-left {}
+#carousel-date {
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.62);
+  font-family: var(--font-mono);
+  margin-bottom: var(--space-1);
+  letter-spacing: 0.08em;
+}
+#carousel-title {
+  font-size: var(--text-xl);
+  font-family: var(--font-display);
+  color: #f4f4f4;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: var(--space-2);
+}
+#carousel-subtitle {
+  font-size: var(--text-sm);
+  color: rgba(255,255,255,0.58);
+  margin-bottom: var(--space-3);
+}
+#carousel-tags {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  pointer-events: all;
+}
+.ctag {
+  font-size: var(--text-xs);
+  padding: 3px 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: var(--radius-full);
+  color: rgba(255,255,255,0.7);
+  font-family: var(--font-mono);
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.04);
+}
+
+#carousel-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-3);
+  pointer-events: all;
+}
+
+#carousel-desc {
+  font-size: var(--text-xs);
+  color: rgba(255,255,255,0.55);
+  max-width: 28ch;
+  text-align: right;
+  line-height: 1.6;
+}
+
+#carousel-github {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  backdrop-filter: blur(12px);
+  cursor: none;
+  transition: all 180ms var(--ease-spring);
+}
+#carousel-github:hover {
+  background: rgba(255,255,255,0.22);
+  transform: translateY(-2px);
+}
+
+/* Nav arrows */
+#carousel-nav { display:none;
+
+  position: absolute;
+  top: 50%;
+  left: 0; right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 var(--space-4);
+  pointer-events: none;
+  z-index: 5;
+}
+.carousel-arrow {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.2);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: none;
+  pointer-events: all;
+  transition: all var(--dur-fast) var(--ease-spring);
+  font-size: 16px;
+}
+.carousel-arrow:hover {
+  background: rgba(255,255,255,0.22);
+  transform: scale(1.1);
+}
+
+/* Dots */
+#carousel-dots {
+  position: absolute;
+  top: var(--space-4);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-2);
+  z-index: 5;
+}
+.cdot {
+  width: 6px; height: 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.25);
+  transition: all var(--dur-base) var(--ease-spring);
+  cursor: none;
+}
+.cdot.active {
+  width: 20px;
+  background: #fff;
+}
+
+#carousel-canvas { border-radius: 18px; }
+#carousel-hud { padding-bottom: var(--space-6); }
