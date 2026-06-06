@@ -151,10 +151,9 @@
   z-index: 0;
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    ABOUT WINDOW
-   ═══════════════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
 .about-content {
   padding: var(--space-5);
   display: grid;
@@ -254,10 +253,9 @@
   transform: translateY(-1px);
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    SKILLS WINDOW
-   ═══════════════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
 .skills-grid {
   padding: var(--space-6);
   display: grid;
@@ -321,10 +319,9 @@
   border-radius: 2px;
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    EXPERIENCE WINDOW
-   ═══════════════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
 .exp-list {
   padding: var(--space-5);
   display: flex;
@@ -398,13 +395,12 @@
 }
 @keyframes pulse-dot {
   0%, 100% { transform: scale(1); box-shadow: 0 0 6px #28c84066; }
-  50%       { transform: scale(1.25); box-shadow: 0 0 12px #28c840aa; }
+  50%      { transform: scale(1.25); box-shadow: 0 0 12px #28c840aa; }
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    BLOGS WINDOW
-   ═══════════════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
 .blog-list {
   padding: var(--space-5);
   display: flex;
@@ -452,10 +448,9 @@
   padding: var(--space-8);
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    CONTACT / QUICK LINKS WINDOW
-   ═══════════════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
 .contact-content {
   padding: var(--space-6);
   display: flex;
@@ -476,7 +471,43 @@
   border-color: var(--color-accent);
   transform: translateX(3px);
 }
-.contact-icon { font-size: 22px; width: 40px; text-align: center; flex-shrink: 0; }
+.contact-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.contact-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+}
+.brand-icon {
+  filter: none;
+}
+.medium-brand {
+  width: 28px;
+  height: 20px;
+}
+.linkedin-brand {
+  width: 20px;
+  height: 20px;
+}
+.ui-contact-icon {
+  filter: brightness(0) saturate(100%);
+}
+[data-theme="dark"] .ui-contact-icon {
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+[data-theme="dark"] .brand-icon,
+[data-theme="dark"] .linkedin-brand,
+[data-theme="dark"] .medium-brand {
+  filter: brightness(0) saturate(100%) invert(100%);
+}
 .contact-info { flex: 1; min-width: 0; }
 .contact-info label {
   font-size: var(--text-xs);
@@ -498,10 +529,9 @@
 }
 .contact-info a:hover { text-decoration: underline; }
 
-
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE — tablet
-   ═══════════════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
   .window {
     width: min(94vw, 760px) !important;
@@ -514,10 +544,9 @@
   .skills-grid    { grid-template-columns: 1fr; }
 }
 
-
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE — mobile
-   ═══════════════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
   .window {
     left: 8px !important;
@@ -537,35 +566,37 @@
   .wa-btn          { min-width: 24px; height: 22px; padding: 0 7px; font-size: 11px; }
   .window-body     { overflow: auto; -webkit-overflow-scrolling: touch; }
 
-  .about-content   { grid-template-columns: 1fr; padding: 16px; gap: 14px; }
+  .about-content    { grid-template-columns: 1fr; padding: 16px; gap: 14px; }
   .about-avatar-col { flex-direction: row; align-items: flex-start; }
-  .about-avatar    { width: 72px; height: 72px; }
-  .about-stats     { flex-direction: row; flex-wrap: wrap; }
-  .about-stat      { min-width: 60px; }
+  .about-avatar     { width: 72px; height: 72px; }
+  .about-stats      { flex-direction: row; flex-wrap: wrap; }
+  .about-stat       { min-width: 60px; }
 
-  .skills-grid     { grid-template-columns: 1fr; padding: 16px; gap: 16px; }
-  .skill-category  { padding: 18px; }
-  .skill-tags      { gap: 8px; }
-  .skill-tag       { padding: 7px 11px; min-height: 34px; }
-  .skill-logo      { width: 15px; height: 15px; }
+  .skills-grid      { grid-template-columns: 1fr; padding: 16px; gap: 16px; }
+  .skill-category   { padding: 18px; }
+  .skill-tags       { gap: 8px; }
+  .skill-tag        { padding: 7px 11px; min-height: 34px; }
+  .skill-logo       { width: 15px; height: 15px; }
 
   .exp-list, .blog-list, .contact-content { padding: 16px; }
-  .exp-header      { flex-direction: column; gap: 4px; }
+  .exp-header       { flex-direction: column; gap: 4px; }
 
-  .blog-card       { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .blog-card-left p{ max-width: none; }
+  .blog-card        { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .blog-card-left p { max-width: none; }
 
-  .contact-row     { align-items: flex-start; gap: 10px; padding: 10px 12px; }
-  .contact-icon    { width: 34px; font-size: 18px; }
-  .contact-info a  { font-size: 13px; white-space: normal; overflow-wrap: anywhere; }
+  .contact-row      { align-items: flex-start; gap: 10px; padding: 10px 12px; }
+  .contact-icon     { width: 34px; height: 34px; }
+  .contact-logo     { width: 18px; height: 18px; }
+  .medium-brand     { width: 24px; height: 18px; }
+  .linkedin-brand   { width: 18px; height: 18px; }
+  .contact-info a   { font-size: 13px; white-space: normal; overflow-wrap: anywhere; }
 
-  .window-resize   { display: none; }
+  .window-resize    { display: none; }
 }
-
 
 /* ═══════════════════════════════════════════════════════════
    LIGHT MODE OVERRIDES — windows need slightly different glass
-   ═══════════════════════════════════════════════════════════ */
+   ════════════════════════════════════════════════════════════ */
 [data-theme="light"] .window {
   border-color: rgba(0,0,0,0.1);
 }
@@ -577,7 +608,6 @@
   background: rgba(0,0,0,0.04);
 }
 [data-theme="light"] .skill-logo {
-  /* SimpleIcons are black SVGs — no filter needed in light mode */
   filter: none;
 }
 [data-theme="light"] .exp-card:hover,

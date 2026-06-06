@@ -7,6 +7,7 @@ import { initCursor }    from './cursor.js';
 import { initDesktop, openWindow, updateDockState } from './desktop.js';
 import { initCarousel }  from './carousel.js';
 
+
 // ── Theme ────────────────────────────────────────────────────
 function setTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
@@ -17,16 +18,21 @@ function initThemeToggle() {
   const mq = window.matchMedia('(prefers-color-scheme: dark)');
   let current = mq.matches ? 'dark' : 'light';
   setTheme(current);
+
   toggle?.addEventListener('click', () => {
     current = current === 'dark' ? 'light' : 'dark';
     setTheme(current);
+    renderContact();
   });
+
   // Keep in sync if OS theme changes
   mq.addEventListener('change', e => {
     current = e.matches ? 'dark' : 'light';
     setTheme(current);
+    renderContact();
   });
 }
+
 
 // ── Clock ────────────────────────────────────────────────────
 function initClock() {
@@ -42,29 +48,44 @@ function initClock() {
   setInterval(fmt, 30_000);
 }
 
+
 // ── Desktop icon grid ────────────────────────────────────────
 function renderDesktopIcons() {
   const grid = document.getElementById('icon-grid');
   if (!grid) return;
+
   const icons = [
-    { emoji: '👤', label: 'About Me',    window: 'about-window' },
-    { emoji: '🗂️', label: 'Projects',   window: 'projects-window' },
-    { emoji: '⚡',  label: 'Skills',     window: 'skills-window' },
-    { emoji: '💼',  label: 'Experience', window: 'experience-window' },
-    { emoji: '✍️', label: 'Blogs',      window: 'blogs-window' },
-    { emoji: '🔗',  label: 'Quick Links',window: 'contact-window' },
+    { icon: 'https://unpkg.com/lucide-static@latest/icons/user-round.svg', label: 'About Me', window: 'about-window', type: 'ui' },
+    { icon: 'https://unpkg.com/lucide-static@latest/icons/folder-kanban.svg', label: 'Projects', window: 'projects-window', type: 'ui' },
+    { icon: 'https://unpkg.com/lucide-static@latest/icons/zap.svg', label: 'Skills', window: 'skills-window', type: 'ui' },
+    { icon: 'https://unpkg.com/lucide-static@latest/icons/briefcase-business.svg', label: 'Experience', window: 'experience-window', type: 'ui' },
+    { icon: 'https://unpkg.com/lucide-static@latest/icons/file-pen-line.svg', label: 'Blogs', window: 'blogs-window', type: 'ui' },
+    { icon: 'https://unpkg.com/lucide-static@latest/icons/link-2.svg', label: 'Quick Links', window: 'contact-window', type: 'ui' },
   ];
+
   grid.innerHTML = icons.map(icon => `
     <button class="desktop-icon" data-window="${icon.window}" aria-label="Open ${icon.label}">
-      <span class="icon-img">${icon.emoji}</span>
+      <span class="icon-img">
+        <img
+          class="desktop-app-icon ${icon.type === 'brand' ? 'brand-icon' : 'ui-app-icon'}"
+          src="${icon.icon}"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          width="28"
+          height="28"
+        />
+      </span>
       <span class="icon-label">${icon.label}</span>
     </button>
   `).join('');
+
   // Show on tablet / mobile only
   const show = () => { grid.hidden = window.innerWidth > 900; };
   show();
   window.addEventListener('resize', show);
 }
+
 
 // ── About window ─────────────────────────────────────────────
 function renderAbout() {
@@ -89,7 +110,7 @@ function renderAbout() {
         <div class="role">${profile.title}</div>
         <p>${profile.tagline} I enjoy thinking about system design, backend architecture, real-time systems, and building polished full-stack products from idea to deployment.</p>
         <div class="about-links">
-          <a class="about-link" href="${profile.links.github}"   target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a class="about-link" href="${profile.links.github}" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
           <a class="about-link" href="${profile.links.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
           <a class="about-link" href="mailto:${profile.links.email}">Email ↗</a>
         </div>
@@ -97,6 +118,7 @@ function renderAbout() {
     </div>
   `;
 }
+
 
 // ── Skills window ─────────────────────────────────────────────
 const SKILL_ICONS = {
@@ -116,9 +138,9 @@ const SKILL_ICONS = {
   "Git":          "git",
   "GitHub":       "github",
   "Postman":      "postman",
-  "VS Code":      "",
+  "VS Code":      "visualstudiocode",
   "Docker":       "docker",
-  "Foundry":      "ethereum",   // no Foundry icon on simpleicons — use ethereum
+  "Foundry":      "ethereum",
   "Streamlit":    "streamlit",
 };
 
@@ -150,6 +172,7 @@ function renderSkills() {
   `;
 }
 
+
 // ── Experience window ─────────────────────────────────────────
 function renderExperience() {
   const el = document.getElementById('experience-content');
@@ -177,6 +200,7 @@ function renderExperience() {
   `;
 }
 
+
 // ── Blogs window ──────────────────────────────────────────────
 function renderBlogs() {
   const el = document.getElementById('blogs-content');
@@ -197,22 +221,75 @@ function renderBlogs() {
   `;
 }
 
+
 // ── Contact / Quick Links window ──────────────────────────────
 function renderContact() {
   const el = document.getElementById('contact-content');
   if (!el) return;
+
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
   const rows = [
-    { icon: '🐙', label: 'GitHub',      href: profile.links.github,            text: '@Srinidhi444' },
-    { icon: '💼', label: 'LinkedIn',    href: profile.links.linkedin,           text: 'srinidhi-kulkarni' },
-    { icon: '✍️', label: 'Medium',      href: profile.links.medium,             text: '@kulkarnisrinidhi85' },
-    { icon: '𝕏',  label: 'Twitter / X', href: profile.links.twitter,            text: '@Srinidhi_kul' },
-    { icon: '📧', label: 'Email',       href: `mailto:${profile.links.email}`,  text: profile.links.email },
+    {
+      icon: isDark
+        ? 'https://cdn.simpleicons.org/github/ffffff'
+        : 'https://cdn.simpleicons.org/github/181717',
+      label: 'GitHub',
+      href: profile.links.github,
+      text: '@Srinidhi444',
+      type: 'brand'
+    },
+    {
+      icon: isDark
+        ? 'https://icons.getbootstrap.com/assets/icons/linkedin.svg'
+        : 'https://icons.getbootstrap.com/assets/icons/linkedin.svg',
+      label: 'LinkedIn',
+      href: profile.links.linkedin,
+      text: 'srinidhi-kulkarni',
+      type: 'brand linkedin-brand'
+    },
+   {
+  icon: isDark
+    ? 'https://cdn.simpleicons.org/medium/ffffff'
+    : 'https://cdn.simpleicons.org/medium/000000',
+  label: 'Medium',
+  href: profile.links.medium,
+  text: '@kulkarnisrinidhi85',
+  type: 'brand'
+},
+    {
+      icon: isDark
+        ? 'https://cdn.simpleicons.org/x/ffffff'
+        : 'https://cdn.simpleicons.org/x/000000',
+      label: 'Twitter / X',
+      href: profile.links.twitter,
+      text: '@Srinidhi_kul',
+      type: 'brand'
+    },
+    {
+      icon: 'https://unpkg.com/lucide-static@latest/icons/mail.svg',
+      label: 'Email',
+      href: `mailto:${profile.links.email}`,
+      text: profile.links.email,
+      type: 'ui-contact-icon'
+    },
   ];
+
   el.innerHTML = `
     <div class="contact-content">
       ${rows.map(r => `
         <div class="contact-row">
-          <div class="contact-icon">${r.icon}</div>
+          <div class="contact-icon">
+            <img
+              class="contact-logo ${r.type}"
+              src="${r.icon}"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              width="20"
+              height="20"
+            />
+          </div>
           <div class="contact-info">
             <label>${r.label}</label>
             <a href="${r.href}" target="_blank" rel="noopener noreferrer">${r.text}</a>
@@ -223,13 +300,12 @@ function renderContact() {
   `;
 }
 
+
 // ── Hero typing animation ─────────────────────────────────────
-// Cycles through multiple phrases instead of just erasing one
 function initHeroTyping() {
   const title = document.querySelector('.hero-title');
   if (!title) return;
 
-  // Respect reduced motion — just show the first phrase
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     title.textContent = 'Welcome to my portfolio';
     return;
@@ -242,13 +318,13 @@ function initHeroTyping() {
     'Let\'s create something great',
   ];
 
-  let phraseIdx = 0;
-  let charIdx   = 0;
-  let deleting  = false;
-  const PAUSE_FULL  = 2200; // ms to pause at full phrase
-  const PAUSE_EMPTY = 400;  // ms to pause at empty before next phrase
-  const TYPE_SPEED  = 68;   // ms per char while typing
-  const DEL_SPEED   = 32;   // ms per char while deleting
+  let phraseIdx  = 0;
+  let charIdx    = 0;
+  let deleting   = false;
+  const PAUSE_FULL  = 2200;
+  const PAUSE_EMPTY = 400;
+  const TYPE_SPEED  = 68;
+  const DEL_SPEED   = 32;
 
   function tick() {
     const phrase = phrases[phraseIdx];
@@ -265,7 +341,7 @@ function initHeroTyping() {
       charIdx--;
       title.textContent = phrase.slice(0, charIdx);
       if (charIdx === 0) {
-        deleting  = false;
+        deleting = false;
         phraseIdx = (phraseIdx + 1) % phrases.length;
         setTimeout(tick, PAUSE_EMPTY);
         return;
@@ -279,6 +355,7 @@ function initHeroTyping() {
   setTimeout(tick, 600);
 }
 
+
 // ── Hero subtitle scroll-reveal ───────────────────────────────
 function initHeroReveal() {
   const items = document.querySelectorAll('.hero-kicker, .hero-subtitle');
@@ -287,7 +364,6 @@ function initHeroReveal() {
     el.style.opacity = '0';
     el.style.transform = 'translateY(10px)';
     el.style.transition = `opacity 0.6s ease ${i * 0.15 + 0.2}s, transform 0.6s ease ${i * 0.15 + 0.2}s`;
-    // Trigger after a tiny delay so transition actually fires
     requestAnimationFrame(() => requestAnimationFrame(() => {
       el.style.opacity = '';
       el.style.transform = '';
@@ -295,13 +371,14 @@ function initHeroReveal() {
   });
 }
 
+
 // ── Taskbar tooltip accessibility ────────────────────────────
-// Already handled by CSS .tooltip, but ensure they're announced
 function initTaskbarA11y() {
   document.querySelectorAll('.taskbar-btn[data-window]').forEach(btn => {
     btn.setAttribute('role', 'button');
   });
 }
+
 
 // ── Boot ─────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', async () => {
